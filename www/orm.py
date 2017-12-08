@@ -29,7 +29,7 @@ async def create_pool(loop, **kw):
         user=kw['user'],
         password=kw['password'],
         db=kw['db'],
-        charset=kw.get('charset', 'utf-8'),
+        charset=kw.get('charset', 'utf8'),  #这里编码一定是 utf8 ，不能是utf-8
         autocommit=kw.get('autocommit', True),
         maxsize=kw.get('maxsize', 10),
         minsize=kw.get('minsize', 1),
@@ -111,6 +111,26 @@ class StringField(Field):
         super().__init__(name, ddl, primary_key, default)
 
 
+class BooleanField(Field):
+    def __init__(self, name=None, default=False):
+        super().__init__(name, 'boolean', False, default)
+
+
+class IntegerField(Field):
+    def __init__(self, name=None, primary_key=False, default=0):
+        super().__init__(name, 'bigint', primary_key, default)
+
+
+class FloatField(Field):
+    def __init__(self, name=None, primary_key=False, default=0.0):
+        super().__init__(name, 'real', primary_key, default)
+
+
+class TextField(Field):
+    def __init__(self, name=None, default=None):
+        super().__init__(name, 'text', False, default)
+
+
 '''Model类是一个基类，通过Metaclass将具体的子类映射信息读取出来
 这样，任何继承自Model的类（比如User），会自动通过ModelMetaclass扫描映射关系，并存储到自身的类属性如__table__、__mappings__中。
 '''
@@ -132,7 +152,7 @@ class ModelMetaclass(type):
         fields = []
         primaryKey = None
 
-        for k, v in attrs.itmes():
+        for k, v in attrs.items():
             if isinstance(v, Field):
                 logging.info('found mapping %s==>%s' % (k, v))
                 mappings[k] = v
@@ -150,10 +170,10 @@ class ModelMetaclass(type):
             attrs.pop(k)
 
         escaped_fields = list(map(lambda f: '`%s`' % f, fields))
-        attrs['__mappings'] = mappings  # 保存属性和列的映射关系
-        attrs['__table'] = tableName
+        attrs['__mappings__'] = mappings  # 保存属性和列的映射关系
+        attrs['__table__'] = tableName
         attrs['__primary_key__'] = primaryKey  # 主键属性名
-        attrs['__fields'] = fields  # 除主键外的其它属性
+        attrs['__fields__'] = fields  # 除主键外的其它属性
         attrs['__select__'] = 'select `%s`, %s from `%s`' % (primaryKey, ','.join(escaped_fields), tableName)
 
         attrs['__insert__'] = 'insert into `%s` (%s, `%s`) values (%s)' % (
@@ -263,5 +283,3 @@ class Model(dict, metaclass=ModelMetaclass):
         rows = await execute(self.__delete__, args)
         if rows != 1:
             logging.warning('failed to remove record: affected rows: %s' % rows)
-
-
