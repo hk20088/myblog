@@ -3,6 +3,7 @@
 
 __author__ = 'Leon Hu'
 
+'''URL handlers'''
 
 import logging;
 logging.basicConfig(level=logging.INFO)
@@ -10,12 +11,20 @@ import time
 import asyncio
 import hashlib
 
+from www.coroweb import get, post
 from www.models import User
+from www.config import configs
 
-
+@get('/')
+async def index(request):
+    users = await User.findAll()
+    return {
+        '__template__':'test.html',
+        'users':users
+    }
 
 COOKIE_NAME = 'awesession'
-# _COOKIE_KEY = configs.session.secret
+_COOKIE_KEY = configs.session.secret
 
 
 # 根据cookie字符串，解析出用户信息相关的
@@ -43,7 +52,7 @@ def cookie2user(cookie_str):
         if user is None:
             return None
         # 根据查到的user的数据构造一个校验sha1字符串
-        # s = '%s-%s-%s-%s' % (uid, user.passwd, expires, _COOKIE_KEY)
+        s = '%s-%s-%s-%s' % (uid, user.passwd, expires, _COOKIE_KEY)
         # 比较cookie里的sha1和校验sha1，一样的话，说明当前请求的用户是合法的
         if sha1 != hashlib.sha1(s.encode('utf-8')).hexdigest():
             logging.info('invalid sha1')
