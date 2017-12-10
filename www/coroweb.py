@@ -9,7 +9,7 @@ from urllib import parse
 
 from aiohttp import web
 
-from apis import APIError
+from www.apis import APIError
 
 '''
 定义一个装饰器可以把函数标记为URL处理函数
@@ -21,8 +21,8 @@ def get(path):
     '''
     def decorator(func):
         @functools.wraps(func)
-        def wrapper(*args, *kw):
-            return func(*args, *kw)
+        def wrapper(*args, **kw):
+            return func(*args, **kw)
 
         # 装饰后添加__method__和__route__这两个属性
         wrapper.__method__='GET'
@@ -37,8 +37,8 @@ def post(path):
     '''
     def decorator(func):
         @functools.wraps(func)
-        def wrapper(*args, *kw):
-            return func(*args, *kw)
+        def wrapper(*args, **kw):
+            return func(*args, **kw)
 
         # 装饰后添加__method__和__route__这两个属性
         wrapper.__method__='POST'
@@ -141,7 +141,7 @@ class RequestHandler(object):
         kw = None
 
         # 确保有参数
-        if self._has_var_kw_arg or self._has_named_kw_args or _required_kw_args:
+        if self._has_var_kw_arg or self._has_named_kw_args or self._required_kw_args:
 
             # POST提交请求的类型(通过content_type可以指定)
             if request.method == 'POST':
@@ -190,8 +190,8 @@ class RequestHandler(object):
                         copy[name] = kw[name]
             # check named arg: 检查命名关键字参数的名字是否和match_info中的重复
             for k, v in request.match_info.items():
-            if k in kw:
-                logging.warning('Duplicate arg name in named arg and kw args: %s' % k)  # 命名参数和关键字参数有名字重复
+                if k in kw:
+                    logging.warning('Duplicate arg name in named arg and kw args: %s' % k)  # 命名参数和关键字参数有名字重复
                 kw[k] = v
 
         # 如果有reqeust这个参数，则把这个参数加到kw中
