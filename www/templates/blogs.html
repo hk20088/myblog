@@ -3,7 +3,20 @@
 {% block title %}日志{% endblock %}
 
 {% block beforehead %}
-<script></script>
+<script>
+<!-- 这里想用VUE框架来做分页，未遂 -->
+<!--var-->
+    <!--pages = '{{ page }}';-->
+
+<!--$(function (){-->
+    <!--var vm = new Vue({-->
+        <!--el:'#vm',-->
+        <!--data:{page: pages},-->
+        <!--method:{}-->
+    <!--})-->
+<!--});-->
+
+</script>
 {% endblock %}
 
 
@@ -18,6 +31,9 @@
         </article>
         <hr class="uk-article-divider">
     {% endfor %}
+        <!-- 继承__base__.html里的方法，用于分页 -->
+    {{ pagination('/?page=', page) }}
+    <!--<div v-component="pagination" v-with="page"></div>-->
     </div>
 
     <div class="uk-width-medium-1-4">
