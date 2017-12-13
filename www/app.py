@@ -23,21 +23,6 @@ from www.config import configs
 from www.handlers import COOKIE_NAME, cookie2user
 
 
-'''
-定义首页返回 hello world...,注意需要加上 content_type='text/html'  ， 否则浏览器可能直接下载网页
-'''
-def index(request):
-    return web.Response(body=b'<h1>hello world...</h1>', content_type='text/html')
-
-
-'''
-/hello/name 根据name的值返回 hello,name!
-'''
-def hello(request):
-    text = '<h1>hello,%s!</h1>' % request.match_info['name']
-    return web.Response(body=text.encode('utf-8'), content_type='text/html')
-
-
 def init_jinja2(app, **kw):
     logging.info('init jinja2...')
     # 初始化模板配置，包括模板运行代码的开始和结束标识符，变量的开始和结束标识符
@@ -116,6 +101,7 @@ def auth_factory(app, handler):
                 logging.info('set current user: %s' % user.email)
                 # user存在则绑定到request上，说明当前用户是合法的
                 request.__user__ = user
+        # 判断链接如果是以manage开头，并且用户为空，或者不是管理员的时候，将页面转到登录页面
         if request.path.startswith('/manage/') and (request.__user__ is None or not request.__user__.admin):
             return web.HTTPFound('/signin')
         # 执行下一步
