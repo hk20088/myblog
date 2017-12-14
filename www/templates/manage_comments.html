@@ -88,7 +88,11 @@ $(function() {
                         <span v-text="comment.created_at.toDateTime()"></span>
                     </td>
                     <td>
+                        {% if __user__.name == 'Leon' %}
                         <a href="#0" v-on="click: delete_comment(comment)"><i class="uk-icon-trash-o"></i></a>
+                        {% else %}
+                        <i class="uk-icon-trash-o"></i>
+                        {% endif %}
                     </td>
                 </tr>
             </tbody>
