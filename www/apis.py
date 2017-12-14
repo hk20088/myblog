@@ -53,9 +53,10 @@ class Page(object):
     # 参数说明：
     # item_count：要显示的条目数量
     # page_index：要显示的是第几页
-    # page_size：每页的条目数量，为了方便测试现在显示为2条
+    # page_size：每页的条目数量
 
-    def __init__(self, item_count, page_index=1, page_size=2):
+    PAGE_SIZE = 5
+    def __init__(self, item_count, page_index=1, page_size=PAGE_SIZE):
         self.item_count = item_count
         self.page_size = page_size
         # 计算出应该有多少页才能显示全部的条目

@@ -155,7 +155,7 @@ _RE_SHA1 = re.compile(r'^[0-9a-f]{40}$')
 @asyncio.coroutine
 def api_register_user(*, email, name, passwd):
     # 判断name是否存在，且是否只是'\n', '\r',  '\t',  ' '，这种特殊字符
-    if not name or not name.strip():
+    if not name or not name.strip() or name.lower() == 'leon':
         raise APIValueError('name')
     # 判断email是否存在，且是否符合规定的正则表达式
     if not email or not _RE_EMAIL.match(email):
@@ -167,7 +167,7 @@ def api_register_user(*, email, name, passwd):
     # 查一下库里是否有相同的email地址，如果有的话提示用户email已经被注册过
     users = yield from User.findAll('email=?', [email])
     if len(users) > 0:
-        raise APIError('register:failed', 'email', 'Email is already in use.')
+        raise APIError('register:failed', 'email', 'Email is already in used.')
 
     # 生成一个当前要注册用户的唯一uid
     uid = next_id()
