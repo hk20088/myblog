@@ -14,13 +14,13 @@ import json
 import os
 import time
 import datetime
-import www.orm as orm
+import orm
 
 from aiohttp import web
 from jinja2 import Environment, FileSystemLoader
-from www.coroweb import add_routes, add_static
-from www.config import configs
-from www.handlers import COOKIE_NAME, cookie2user
+from coroweb import add_routes, add_static
+from config import configs
+from handlers import COOKIE_NAME, cookie2user
 
 
 def init_jinja2(app, **kw):

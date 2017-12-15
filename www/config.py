@@ -10,7 +10,7 @@ config_override.py 是生产环境的标准配置
 应用程序读取配置文件需要优先从config_override.py读取。为了简化读取配置文件，可以把所有配置读取到统一的config.py中
 '''
 
-import www.config_default as config_default
+import config_default
 
 
 class Dict(dict):

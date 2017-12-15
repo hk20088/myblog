@@ -9,7 +9,7 @@ from urllib import parse
 
 from aiohttp import web
 
-from www.apis import APIError
+from apis import APIError
 
 '''
 定义一个装饰器可以把函数标记为URL处理函数

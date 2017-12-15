@@ -12,13 +12,13 @@ import asyncio
 import hashlib
 import re
 import json
-import www.markdown2 as markdown2
+import markdown2
 
 from aiohttp import web
-from www.coroweb import get, post
-from www.models import User, Blog, Comment, next_id
-from www.config import configs
-from www.apis import APIValueError, APIPermissionError, APIError, APIResourceNotFoundError, Page
+from coroweb import get, post
+from models import User, Blog, Comment, next_id
+from config import configs
+from apis import APIValueError, APIPermissionError, APIError, APIResourceNotFoundError, Page
 
 # 判断当前用户是否是管理员
 def check_admin(request):
@@ -266,6 +266,11 @@ async def api_get_users(*, page='1'):
 
 # ----------------------------------------博客管理的处理函数-----------------------------------------#
 
+# 管理首页，重写向到评论管理
+@get('/manage')
+def manage():
+    return 'redirect:/manage/blogs'
+
 # 跳到写博客的页面
 @get('/manage/blogs/create')
 def manage_create_blog():
@@ -401,10 +406,6 @@ def api_delete_blog(id, request):
 
 # ----------------------------------博客评论的处理函数------------------------------------#
 
-# 管理首页，重写向到评论管理
-@get('/manage')
-def manage():
-    return 'redirect:/manage/comments'
 
 # 获取所有评论
 @get('/manage/comments')

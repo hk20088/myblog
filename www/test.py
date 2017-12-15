@@ -3,12 +3,12 @@
 
 __author__ = 'Leon Hu'
 
-import www.orm as om, asyncio
-from www.models import User, Blog, Comment
+import orm, asyncio
+from models import User, Blog, Comment
 
 
 async def test(loop):
-    await om.create_pool(loop=loop,user='root', password='password', db='awesome')
+    await orm.create_pool(loop=loop,user='root', password='password', db='awesome')
 
     u = User(name='Test', email='H@example.com', passwd='1234567890', image='about:blank')
 
