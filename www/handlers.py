@@ -334,7 +334,8 @@ async def get_blog(id):
 
     # markdown2是个扩展模块，这里把博客正文和评论套入到markdonw2中
     for c in comments:
-        c.html_content = text2html(c.content)
+        # c.html_content = text2html(c.content)
+        c.html_content = markdown2.markdown(c.content)
     blog.html_content = markdown2.markdown(blog.content)
     return {
         '__template__': 'blog.html',
