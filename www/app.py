@@ -218,9 +218,10 @@ def init(loop):
     add_routes(app, 'handlers')
     add_static(app)
 
+    SERVER_IP = '127.0.0.1'
     # loop.create_server()则利用asyncio创建TCP服务。
-    srv = yield from loop.create_server(app.make_handler(), '127.0.0.1', 9000)
-    logging.info('server started at 127.0.0.1:9000')
+    srv = yield from loop.create_server(app.make_handler(), SERVER_IP, 9000)
+    logging.info('server started at %s:9000' % SERVER_IP)
     return srv
 
 
