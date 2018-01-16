@@ -62,7 +62,7 @@ async def index(*, page='1'):
         blogs = []
     else:
         # 否则，根据计算出来的offset(取的初始条目index)和limit(取的条数)，来取出条目
-        blogs = await Blog.findAll(orderBy='created_at desc', limit=(page.offset, page.limit))
+        blogs = await Blog.findAll(orderBy='priority desc,created_at desc', limit=(page.offset, page.limit))
         # 返回给浏览器
     return {
         '__template__': 'blogs.html',
@@ -360,7 +360,7 @@ def api_blogs(*, page='1'):
     p = Page(num, page_index)
     if num == 0:
         return dict(page=p, blogs=())
-    blogs = yield from Blog.findAll(orderBy='created_at desc', limit=(p.offset, p.limit))
+    blogs = yield from Blog.findAll(orderBy='priority desc,created_at desc', limit=(p.offset, p.limit))
     return dict(page=p, blogs=blogs)
 
 
